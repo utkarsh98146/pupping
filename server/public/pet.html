@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Pet</title>
+</head>
+
+<body>
+    <h1>Add a New Pet</h1>
+    <form action="http://localhost:3001/pets/addPet/67a5aa1f38d9fd14a74887e3" method="POST"
+        enctype="multipart/form-data">
+        <!-- You need to replace ":userId" with the actual userId you want to test with -->
+
+        <label for="petName">Pet Name:</label>
+        <input type="text" id="petName" name="petName" required><br><br>
+
+        <label for="petCategory">Pet Category:</label>
+        <input type="text" id="petCategory" name="petCategory" required><br><br>
+
+        <label for="petBreed">Pet Breed:</label>
+        <input type="text" id="petBreed" name="petBreed" required><br><br>
+
+        <label for="birthMonth">Birth Month:</label>
+        <input type="number" id="birthMonth" name="birthMonth" min="1" max="12" required><br><br>
+
+        <label for="birthYear">Birth Year:</label>
+        <input type="number" id="birthYear" name="birthYear" min="1900" required><br><br>
+
+        <label for="petAge">Pet Age:</label>
+        <input type="number" id="petAge" name="petAge" required><br><br>
+
+        <label for="petProfileImage">Upload Pet Image:</label>
+        <input type="file" id="petProfileImage" name="petProfileImage"><br><br>
+
+        <button type="submit">Add Pet</button>
+    </form>
+</body>
+
+</html>
