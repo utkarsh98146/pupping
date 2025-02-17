@@ -53,7 +53,7 @@ export const addPetController = async (req, res) => {
         user.pets.push(pet._id)  // extra linking (optional)
         console.log(user.pets.push(pet._id));
 
-        await pet.save()
+        await pet.save() // saving the pet data into the pet db
         res.status(201).json({ message: 'Pet added successfully in db', pet, success: true })
         console.log("pet information stored in db")
     } catch (error) {
