@@ -50,7 +50,7 @@ export const addPetController = async (req, res) => {
             { $push: { pets: pet._id } } // Push pet ID into the pets array
         );
 
-        user.pets.push(pet._id)  // extra linking (optional)
+
         console.log(user.pets.push(pet._id));
 
         await pet.save() // saving the pet data into the pet db

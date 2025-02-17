@@ -34,27 +34,27 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors())
 
 //*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*
+
 // router
 
-// router for auth
-app.use("/userAuth", authRouter)
-app.use('/userProfile', userProfileRouter)
-app.use('/pets', petRouter)
-app.use("/service", serviceRouter)
-app.use('/booking', bookingRouter)
+app.use("/userAuth", authRouter) // router for auth
+app.use('/userProfile', userProfileRouter) // user profile routes
+app.use('/pets', petRouter) // pet fuctionality routes
+app.use("/service", serviceRouter) // services routes
+app.use('/booking', bookingRouter) // booking routes
 
 
 //-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*
 // for ui testing integration
 
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
+// const __filename = fileURLToPath(import.meta.url)
+// const __dirname = path.dirname(__filename)
 
-app.use(express.static(path.join(__dirname, 'public')))
-app.use('/uploads', express.static('uploads'))
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'home.html'));
-});
+// app.use(express.static(path.join(__dirname, 'public')))
+// app.use('/uploads', express.static('uploads'))
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, 'public', 'home.html'));
+// });
 //-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*
 
 // for enter the service 
@@ -79,6 +79,7 @@ Vehicle.findOne().then(document => {
 }).catch((err) => {
     console.log("Something gone wrong to add vehilces")
 })
+
 
 console.log("Hi server")
 const PORT = process.env.PORT || 3000;

@@ -1,32 +1,29 @@
 import mongoose from "mongoose";
 
 export const petSchema = new mongoose.Schema({
-    owner: {
+    owner: {  // same just to check the user belongs to which pet
         type: mongoose.Schema.Types.ObjectId,
         ref: "UserDB",
-        //required:true,
+        required: true,
     },
-    // owner: {      // same jsut to check the user belongs to which pet
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "User"
-    // },
+
     petProfileImage: {
         type: String,
-        //required:false,  
+        required: true,
     },
     petName: {
         type: String,
-        //required:true,
+        required: true,
     },
     petCategory: {
         type: String,
         enum: ['Cat', 'Dog'],
-        // required: true,
+        required: true,
 
     },
     petBreed: {
         type: String,
-        //required:true,
+        required: true,
     },
     birthMonth: {
         type: String,

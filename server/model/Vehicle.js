@@ -3,8 +3,8 @@ import mongoose from "mongoose";
 const VehicleSchema = new mongoose.Schema({
     type: {
         type: String,
-        required: true,
         enum: ["Bike Service", "Van Service"],
+        required: true,
     },
     price: {
         type: Number,

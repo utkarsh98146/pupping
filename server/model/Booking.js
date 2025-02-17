@@ -38,8 +38,6 @@ export const bookingSchema = new mongoose.Schema({
             ref: "VehicleDB",
             required: true,
         },
-        // changes here on 11-02 start from here 
-
         vehicleName: {
             type: String,
             required: true,
@@ -50,7 +48,6 @@ export const bookingSchema = new mongoose.Schema({
             min: 0,
         },
 
-        // to end here
     },
     totalAmount: {
         type: Number,
@@ -63,7 +60,7 @@ export const bookingSchema = new mongoose.Schema({
             default: Date.now
         },
         bookTimeSlot: {
-            // timeRanges: String,
+            // timeRanges: String, 
             type: String,
             required: true,
         },
