@@ -1,5 +1,8 @@
 import { UserProfile } from "../model/User.js"
 import { generateOtp } from "../utils/otpGeneration.js"
+import jwt from "jsonwebtoken"
+import dotenv from 'dotenv'
+dotenv.config()
 
 
 //send otp service
@@ -36,22 +39,42 @@ export const sendOtpService = async (phoneNumber) => {
 
 // verify otp service
 export const verifyOtpService = async (phoneNumber, otp) => {
-    let user = await UserProfile.findOne({ phoneNumber })
 
-    if (!user || !user.otp === otp) {
-        return res.status(404).json({ message: 'Invalid or expired otp. Please request a new OTP.' })
+    try {
+        let user = await UserProfile.findOne({ phoneNumber })
+        console.log(user ? `User found` : `User not found`);
+
+        if (!user) {
+            return { success: false, message: 'User not Found' }
+        }
+        if (user.otp !== otp.toString()) {
+            return { success: false, message: 'Invalid or expired OTP. Please request a new OTP.' };
+        }
+        if (user.otp === otp) {
+            user.isVerified = true
+            user.otp = null  // otp clear after verification
+            // user.otpExpires = null
+            await user.save()
+            console.log(user.save ? `Data saved` : `Data not saved`)
+            // Generate JWT Token
+            const token = jwt.sign(
+                {
+                    userId: user._id,
+                    phoneNumber: user.phoneNumber
+                },
+                process.env.SECRET_KEY,
+                { expiresIn: '2h' } // Token expires in 2h
+            )
+
+            console.log(`Otp Verified and TOken generated successfully.. `);
+            console.log(`TOKEN ${token}`);
+            return { user, token }
+            // return { sucess: true, message: 'Otp Verified Succefully..', user, token }
+        }
+    } catch (err) {
+        console.log('Error while verifying otp', err.message)
+        return { success: false, message: 'Internal server error', error: err.message }
     }
-
-    // if (user.otp === otp && new Date() < user.otpExpires) {
-    if (user.otp === otp) {
-        user.isVerified = true
-        user.otp = null
-        // user.otpExpires = null
-        await user.save()
-        return user
-        // res.status(200).json({ message: 'Otp Verified Succefully..', user })
-    }
-
 
 }
 

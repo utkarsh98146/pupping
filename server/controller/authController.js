@@ -15,11 +15,11 @@ export const checkUserType = async (req, res) => {
 
         if (!user || user.isNewUser) {
             console.log("New Number found")
-            return res.status(200).json({ message: 'New User. Proceed to registration form', isNewUser: true, success: true })
+            return res.status(200).json({ message: 'New User. Proceed to registration form', isNewUser: true, success: true, })
         }
         else {
             console.log("Existing Number found")
-            return res.status(200).json({ message: 'User already exits. Proceed to login', isNewUser: false, success: true })
+            return res.status(200).json({ message: 'User already exits. Proceed to login', isNewUser: false, success: true, })
         }
 
     } catch (error) {
@@ -89,8 +89,12 @@ export const verifyOtp = async (req, res) => {
     try {
 
         const user = await verifyOtpService(phoneNumber, otp)
+        const response = user
+
+        console.log(`Response from the service() ${response}`)
+        console.log(`Response from the service() ${user.data}`)
         if (user.isVerified) {
-            res.status(200).json({ message: 'OTP succcessfully verified...', data: user, success: true })
+            res.status(200).json({ message: 'OTP succcessfully verified...', data: user, success: true, token: user.token })
             console.log("OTP succcessfully verified...")
 
             // 12-02 changes
@@ -99,6 +103,21 @@ export const verifyOtp = async (req, res) => {
         else {
             res.status(400).json({ message: 'Invalid or expired otp. Please request a new OTP.', success: false })
         }
+
+        // let response = await verifyOtpService(phoneNumber, otp)
+        // if (response.success) {
+        //     res.status(200).json({
+        //         message: 'Otp successfully verified',
+        //         data: response.user,
+        //         token: response.token,
+        //         success: true,
+        //     })
+        //     console.log("OTP succcessfully verified...")
+        //     console.log(response.user.isNewUser ? `New User directed to Registration page` : `user alaready present direct to dashboard`)
+        // } else {
+        //     res.status(400).json({ message: `Invalid or expired otp. Please request a new OTP.${response.message}`, success: false, data: response })
+        // }
+
     } catch (error) {
         res.status(500).json({ message: 'Otp verification failed', error: error.message, success: false })
 
