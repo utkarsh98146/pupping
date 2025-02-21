@@ -47,30 +47,32 @@ export const verifyOtpService = async (phoneNumber, otp) => {
         if (!user) {
             return { success: false, message: 'User not Found' }
         }
-        if (user.otp !== otp.toString()) {
+        if (!user.otp || user.otp.toString() !== otp.toString()) {
             return { success: false, message: 'Invalid or expired OTP. Please request a new OTP.' };
         }
-        if (user.otp === otp) {
-            user.isVerified = true
-            user.otp = null  // otp clear after verification
-            // user.otpExpires = null
-            await user.save()
-            console.log(user.save ? `Data saved` : `Data not saved`)
-            // Generate JWT Token
-            const token = jwt.sign(
-                {
-                    userId: user._id,
-                    phoneNumber: user.phoneNumber
-                },
-                process.env.SECRET_KEY,
-                { expiresIn: '2h' } // Token expires in 2h
-            )
 
-            console.log(`Otp Verified and TOken generated successfully.. `);
-            console.log(`TOKEN ${token}`);
-            return { user, token }
-            // return { sucess: true, message: 'Otp Verified Succefully..', user, token }
-        }
+        // if (user.otp === otp) {
+        user.isVerified = true
+        user.otp = null  // otp clear after verification
+        await user.save()
+        console.log(user.save ? `Data saved` : `Data not saved`)
+
+        // Generate JWT Token
+        const token = jwt.sign(
+            {
+                userId: user._id,
+                phoneNumber: user.phoneNumber
+            },
+            process.env.SECRET_KEY,
+            { expiresIn: '2h' } // Token expires in 2h
+        )
+
+        console.log(`Otp Verified and TOken generated successfully.. `);
+        console.log(`TOKEN ${token}`);
+        // return { user, token }
+        return { success: true, message: 'Otp Verified Succefully..', user, token, isVerified: user.isVerified }
+
+        // }
     } catch (err) {
         console.log('Error while verifying otp', err.message)
         return { success: false, message: 'Internal server error', error: err.message }

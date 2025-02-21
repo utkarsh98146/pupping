@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken'
 const SECRETKEY = "imtonystark"
 const app = express()
 
+
 app.get('/', (req, res) => {
     res.json({
         message: 'sample api'
@@ -22,16 +23,9 @@ app.post('/login', (req, res) => {
 })
 
 app.post('/profile', verifyToken, (req, res) => {
-    jwt.verify(req.token, SECRETKEY, (err, authData) => {
-        if (err) {
-            res.send({ result: 'Invalid token' })
-        }
-        else {
-            res.json({ message: 'Profile accessed', data: authData })
-        }
-    })
+    res.status(200).json({ message: 'Profile accessed successfully..', user: req.user })
 })
-
+/* JWT Token
 function verifyToken(req, res, next) {
     const bearerHeader = req.headers['authorization']
     if (typeof bearerHeader !== 'undefined') {
@@ -46,6 +40,56 @@ function verifyToken(req, res, next) {
         })
     }
 }
+*/
+// OR II APproach
+
+function verifyToken(req, res, next) {
+    const bearerHeader = req.headers['authorization']
+
+    if (!bearerHeader) {
+        return res.status(401).json({ message: 'Unauthorized', success: false })
+    }
+
+    const token = bearerHeader.split(' ')[1]
+
+    jwt.verify(token, SECRETKEY, (err, auth) => {
+        if (err) {
+            return res.status(403).json({ message: 'Invalid token' })
+        }
+        req.user = auth
+        next()
+    })
+
+
+    // }
+}
+/*function verifyToken(req, res, next) {
+    const token = req.header('Authorization').split(' ')[1]
+    console.log(`Token:${token}`)
+ 
+    if (!token) {
+        return res.status(403).json({ message: 'Token is required' })
+    }
+    jwt.verify(token, SECRETKEY, (err, authData) => {
+        if (err) {
+            return res.status(401).json({ message: 'Invalid token' })
+        }
+        req.user = authData
+        next()
+    })
+}*/
+
+// function verifyToken(req, res, next) {
+//     const bearerHeader = req.headers["authorization"];
+//     if (typeof bearerHeader !== "undefined") {
+//         const bearerToken = bearerHeader.split(" ")[1];
+//         req.token = bearerToken;
+//         next();
+//     } else {
+//         res.sendStatus(403);
+//     }
+// }
+
 app.listen(5000, (req, res) => {
     console.log(`Server start..`)
 })

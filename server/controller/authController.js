@@ -26,40 +26,6 @@ export const checkUserType = async (req, res) => {
         res.status(500).json({ message: "Error while checking user status type", error: error.message, success: false })
     }
 }
-
-// check user type
-// export const checkUserType = async (req, res) => {
-//     const { phoneNumber } = req.body;
-//     console.log(phoneNumber);
-
-//     if (!phoneNumber) {
-//         console.log("Number not entered");
-//         return res.status(400).json({ message: 'Please enter the phone number', success: false });
-//     }
-
-//     try {
-//         const user = await UserProfile.findOne({ phoneNumber });
-
-//         if (user) {
-//             console.log("Existing Number found");
-//             res.status(200).json({
-//                 message: 'User already exists. Proceed to login',
-//                 isNewUser: user.isNewUser,  // Use the actual value from the database
-//                 success: true
-//             });
-//         } else {
-//             console.log("New Number found");
-//             res.status(200).json({
-//                 message: 'New User. Proceed to registration form',
-//                 isNewUser: true,
-//                 success: true
-//             });
-//         }
-//     } catch (error) {
-//         res.status(500).json({ message: "Error while checking user status type", error: error.message, success: false });
-//     }
-// };
-
 // send otp
 export const sendOtp = async (req, res) => {
     console.log("Hi send otp")
@@ -89,11 +55,10 @@ export const verifyOtp = async (req, res) => {
     try {
 
         const user = await verifyOtpService(phoneNumber, otp)
-        const response = user
 
-        console.log(`Response from the service() ${response}`)
-        console.log(`Response from the service() ${user.data}`)
-        if (user.isVerified) {
+        console.log(`Verify otp service return:`, user)
+
+        if (user.success) {
             res.status(200).json({ message: 'OTP succcessfully verified...', data: user, success: true, token: user.token })
             console.log("OTP succcessfully verified...")
 
@@ -104,19 +69,7 @@ export const verifyOtp = async (req, res) => {
             res.status(400).json({ message: 'Invalid or expired otp. Please request a new OTP.', success: false })
         }
 
-        // let response = await verifyOtpService(phoneNumber, otp)
-        // if (response.success) {
-        //     res.status(200).json({
-        //         message: 'Otp successfully verified',
-        //         data: response.user,
-        //         token: response.token,
-        //         success: true,
-        //     })
-        //     console.log("OTP succcessfully verified...")
-        //     console.log(response.user.isNewUser ? `New User directed to Registration page` : `user alaready present direct to dashboard`)
-        // } else {
-        //     res.status(400).json({ message: `Invalid or expired otp. Please request a new OTP.${response.message}`, success: false, data: response })
-        // }
+
 
     } catch (error) {
         res.status(500).json({ message: 'Otp verification failed', error: error.message, success: false })
@@ -141,20 +94,3 @@ export const resendOtp = async (req, res) => {
     }
 }
 
-
-// login with Otp after registration
-// export const loginWithOtp = async (req, res) => {
-//     const { phoneNumber } = req.body
-
-//     if (!phoneNumber) {
-//         return res.status(400).json({ message: 'Phone number required' })
-//     }
-//     let user = await UserProfile.findOne({ phoneNumber })
-//     if (!user) {
-//         return res.status(404).json({ message: 'User not found' })
-//     }
-//     if (!user.isVerified) {
-//         return res.status(403).json({ message: 'Unauthorized user, Please verify your phone number' })
-//     }
-//     res.status(200).json({ message: 'Login successfully..', user })
-// }

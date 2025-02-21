@@ -1,15 +1,13 @@
 import express from 'express'
 import { uploadImage } from '../middleware/imageStoringProcess.js'
 import { registration } from '../controller/userController.js'
+import { verifyTokenService } from '../middleware/verifyToken.js'
 
 
 const router = express.Router()
 
-// // get user profile
-// router.get('/profile', authenticateUser, getUserDet)
-
 //user registeration after otp
-router.post('/registration', uploadImage('userProfileImage'), registration)
+router.post('/registration', verifyTokenService, uploadImage('userProfileImage'), registration)
 
 
 export const userProfileRouter = router

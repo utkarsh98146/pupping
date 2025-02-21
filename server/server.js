@@ -3,8 +3,6 @@ import dotenv from 'dotenv'
 import { dbConnect } from './config/dbConnection.js'
 import { petRouter } from './router/petRoutes.js'
 import cors from 'cors'
-import path from 'path'
-import { fileURLToPath } from 'url'
 import { authRouter } from './router/authRoutes.js'
 import { userProfileRouter } from './router/userRoutes.js'
 import { Service } from './model/Service.js'
@@ -37,25 +35,13 @@ app.use(cors())
 
 // router
 
-app.use("/userAuth", authRouter) // router for auth
+app.use("/api/userAuth", authRouter) // router for auth
 app.use('/userProfile', userProfileRouter) // user profile routes
 app.use('/pets', petRouter) // pet fuctionality routes
 app.use("/service", serviceRouter) // services routes
 app.use('/booking', bookingRouter) // booking routes
 
 
-//-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*
-// for ui testing integration
-
-// const __filename = fileURLToPath(import.meta.url)
-// const __dirname = path.dirname(__filename)
-
-// app.use(express.static(path.join(__dirname, 'public')))
-// app.use('/uploads', express.static('uploads'))
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, 'public', 'home.html'));
-// });
-//-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*--*-*-*-*-*-*
 
 // for enter the service 
 Service.findOne().then(document => {
